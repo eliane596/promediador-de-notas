@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promediador de Notas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 100%;
+        }
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-top: 10px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .resultado {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+        }
+        .resultado.show {
+            display: block;
+        }
+        .promedio {
+            font-size: 48px;
+            font-weight: bold;
+            color: #667eea;
+            margin: 10px 0;
+        }
+        .mensaje {
+            color: #666;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Promediador de Notas</h1>
+        <div class="input-group">
+            <label for="nota1">Primera Nota (0-100):</label>
+            <input type="number" id="nota1" min="0" max="100" placeholder="Ingresa la primera nota">
+        </div>
+        <div class="input-group">
+            <label for="nota2">Segunda Nota (0-100):</label>
+            <input type="number" id="nota2" min="0" max="100" placeholder="Ingresa la segunda nota">
+        </div>
+        <div class="input-group">
+            <label for="nota3">Tercera Nota (0-100):</label>
+            <input type="number" id="nota3" min="0" max="100" placeholder="Ingresa la tercera nota">
+        </div>
+        <button onclick="calcularPromedio()">Calcular Promedio</button>
+        <div class="resultado" id="resultado">
+            <div class="promedio" id="promedio"></div>
+            <div class="mensaje" id="mensaje"></div>
+        </div>
+    </div>
+
+    <script>
+        function calcularPromedio() {
+            const nota1 = parseFloat(document.getElementById('nota1').value);
+            const nota2 = parseFloat(document.getElementById('nota2').value);
+            const nota3 = parseFloat(document.getElementById('nota3').value);
+
+            if (isNaN(nota1) || isNaN(nota2) || isNaN(nota3)) {
+                alert('Por favor, ingresa todas las notas');
+                return;
+            }
+
+            if (nota1 < 0 || nota1 > 100 || nota2 < 0 || nota2 > 100 || nota3 < 0 || nota3 > 100) {
+                alert('Las notas deben estar entre 0 y 100');
+                return;
+            }
+
+            const promedio = ((nota1 + nota2 + nota3) / 3).toFixed(2);
+            
+            document.getElementById('promedio').textContent = promedio;
+            
+            let mensaje = '';
+            if (promedio >= 90) {
+                mensaje = '¡Excelente! 🌟';
+            } else if (promedio >= 80) {
+                mensaje = '¡Muy bien! 👏';
+            } else if (promedio >= 70) {
+                mensaje = 'Bien hecho 👍';
+            } else if (promedio >= 60) {
+                mensaje = 'Aprobado ✓';
+            } else {
+                mensaje = 'Necesitas mejorar 📖';
+            }
+            
+            document.getElementById('mensaje').textContent = mensaje;
+            document.getElementById('resultado').classList.add('show');
+        }
+    </script>
+</body>
+</html>
