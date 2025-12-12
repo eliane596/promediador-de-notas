@@ -7,21 +7,34 @@ import BackgroundDecorations from './components/BackgroundDecorations';
 import { Semester, GlobalStats } from './types';
 import { generatePDF } from './utils/pdfGenerator';
 
-const App: React.FC = () => {
-  const [semesters, setSemesters] = useState<Semester[]>([]);
+const STORAGE_KEY = 'academic_calculator_data_eliane';
 
-  // Initialize with one semester if empty
-  useEffect(() => {
-    if (semesters.length === 0) {
-      setSemesters([
-        {
-          id: crypto.randomUUID(),
-          name: 'Semestre 1',
-          subjects: []
+const App: React.FC = () => {
+  // Inicialización con carga desde LocalStorage
+  const [semesters, setSemesters] = useState<Semester[]>(() => {
+    try {
+      if (typeof window !== 'undefined') {
+        const savedData = localStorage.getItem(STORAGE_KEY);
+        if (savedData) {
+          return JSON.parse(savedData);
         }
-      ]);
+      }
+    } catch (error) {
+      console.error("Error al cargar datos guardados:", error);
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+    // Estado inicial por defecto si no hay nada guardado
+    return [{
+      id: crypto.randomUUID(),
+      name: 'Semestre 1',
+      subjects: []
+    }];
+  });
+
+  // Efecto para guardar automáticamente cada vez que 'semesters' cambia
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(semesters));
+  }, [semesters]);
 
   const calculateGlobalStats = (): GlobalStats => {
     let totalCredits = 0;
